@@ -27,6 +27,37 @@ func isHeaderAllowed(s string) (string, bool) {
 	return s, false
 }
 
+func TokenAuthMiddleware() gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+		//authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
+		//if len(authorizationHeader) == 0 {
+		//	err := errors.New("authorization header is not provided")
+		//	ctx.AbortWithStatusJSON(http.StatusUnauthorized, err)
+		//	return
+		//}
+		token := ctx.Request.FormValue("auth_key")
+
+		if token == "" {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Token must be filled"})
+			return
+		}
+		if !tokenAuthorized(token) {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Token invalido"})
+			return
+		}
+
+		ctx.Next()
+	}
+
+}
+
+func tokenAuthorized(token string) bool {
+	value := GetValue(nil, token)
+	//value := service.GetPg("frf", 4).Nonce
+	return value != ""
+}
+
 func main() {
 	// creating mux for gRPC gateway. This will multiplex or route request different gRPC service
 	mux := runtime.NewServeMux(
@@ -55,7 +86,11 @@ func main() {
 	// Creating a normal HTTP server
 	server := gin.New()
 	server.Use(gin.Logger())
-	server.Group("*{grpc_gateway}").Any("", gin.WrapH(mux))
+	//server.Use(TokenAuthMiddleware())
+	server.Group("/req_pq").Any("", gin.WrapH(mux))
+	server.Group("/req_dh_params").Any("", gin.WrapH(mux))
+	server.Group("/get_users", TokenAuthMiddleware()).Any("", gin.WrapH(mux))
+	server.Group("/get_users_with_sql_inject", TokenAuthMiddleware()).Any("", gin.WrapH(mux))
 
 	//server.GET("/test", func(c *gin.Context) {
 	//	c.String(http.StatusOK, "Ok")

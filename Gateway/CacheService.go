@@ -12,7 +12,7 @@ var initialized = false
 
 func startRedisConnection() {
 	client = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "127.0.0.1:6379",
 		Password: "", // no password set
 		DB:       3,  // use default DB
 	})
@@ -22,6 +22,9 @@ func startRedisConnection() {
 func GetValue(ctx context.Context, key string) string {
 	if !initialized {
 		startRedisConnection()
+	}
+	if ctx == nil {
+		ctx = context.TODO()
 	}
 	val, err := client.Get(ctx, key).Result()
 	if err != nil {
@@ -35,6 +38,9 @@ func cacheData(ctx context.Context, key string, value string, expirationDuration
 	if !initialized {
 		startRedisConnection()
 	}
+	if ctx == nil {
+		ctx = context.TODO()
+	}
 	if expirationDuration == -1 {
 		expirationDuration = redis.KeepTTL
 	}
@@ -47,6 +53,9 @@ func cacheData(ctx context.Context, key string, value string, expirationDuration
 func deleteValue(ctx context.Context, key string) {
 	if !initialized {
 		startRedisConnection()
+	}
+	if ctx == nil {
+		ctx = context.TODO()
 	}
 	err := client.Del(ctx, key).Err()
 	if err != nil {
