@@ -32,7 +32,7 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 
 func (c *authClient) ReqPq(ctx context.Context, in *ReqPqInput, opts ...grpc.CallOption) (*ReqPqResponse, error) {
 	out := new(ReqPqResponse)
-	err := c.cc.Invoke(ctx, "/main.Auth/req_pq", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.Auth/req_pq", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (c *authClient) ReqPq(ctx context.Context, in *ReqPqInput, opts ...grpc.Cal
 
 func (c *authClient) Req_DHParams(ctx context.Context, in *Req_DHParamsInput, opts ...grpc.CallOption) (*Req_DHParamsResponse, error) {
 	out := new(Req_DHParamsResponse)
-	err := c.cc.Invoke(ctx, "/main.Auth/req_DH_params", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.Auth/req_DH_params", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func _Auth_ReqPq_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.Auth/req_pq",
+		FullMethod: "/auth.Auth/req_pq",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).ReqPq(ctx, req.(*ReqPqInput))
@@ -108,7 +108,7 @@ func _Auth_Req_DHParams_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.Auth/req_DH_params",
+		FullMethod: "/auth.Auth/req_DH_params",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).Req_DHParams(ctx, req.(*Req_DHParamsInput))
@@ -120,7 +120,7 @@ func _Auth_Req_DHParams_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Auth_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "main.Auth",
+	ServiceName: "auth.Auth",
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

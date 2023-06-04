@@ -115,7 +115,7 @@ func RegisterAuthHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/main.Auth/ReqPq", runtime.WithHTTPPathPattern("/req_pq"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/auth.Auth/ReqPq", runtime.WithHTTPPathPattern("/req_pq"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -138,7 +138,7 @@ func RegisterAuthHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/main.Auth/Req_DHParams", runtime.WithHTTPPathPattern("/req_dh_params"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/auth.Auth/Req_DHParams", runtime.WithHTTPPathPattern("/req_dh_params"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -200,7 +200,7 @@ func RegisterAuthHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/main.Auth/ReqPq", runtime.WithHTTPPathPattern("/req_pq"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/auth.Auth/ReqPq", runtime.WithHTTPPathPattern("/req_pq"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -220,7 +220,7 @@ func RegisterAuthHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/main.Auth/Req_DHParams", runtime.WithHTTPPathPattern("/req_dh_params"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/auth.Auth/Req_DHParams", runtime.WithHTTPPathPattern("/req_dh_params"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
