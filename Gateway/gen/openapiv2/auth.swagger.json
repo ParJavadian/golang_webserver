@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "auth.proto",
+    "title": "option go_package = \"github.com/anshulrgoyal/grpc-gateway-demo;grpc_gateway_demo\";",
     "version": "version not set"
   },
   "tags": [

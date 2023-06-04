@@ -2,11 +2,11 @@
 // source: auth.proto
 
 /*
-Package grpc_gateway_demo is a reverse proxy.
+Package auth is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package grpc_gateway_demo
+package auth
 
 import (
 	"context"
