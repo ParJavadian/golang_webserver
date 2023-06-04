@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/mainReq_DH_params_response"
+              "$ref": "#/definitions/authReq_DH_params_response"
             }
           },
           "default": {
@@ -73,7 +73,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/mainReq_pq_response"
+              "$ref": "#/definitions/authReq_pq_response"
             }
           },
           "default": {
@@ -105,7 +105,7 @@
     }
   },
   "definitions": {
-    "mainReq_DH_params_response": {
+    "authReq_DH_params_response": {
       "type": "object",
       "properties": {
         "nonce": {
@@ -124,7 +124,7 @@
         }
       }
     },
-    "mainReq_pq_response": {
+    "authReq_pq_response": {
       "type": "object",
       "properties": {
         "nonce": {

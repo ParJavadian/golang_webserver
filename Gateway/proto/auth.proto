@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 //option java_multiple_files = true;
 option go_package = "web/hw1/auth";
 //option go_package = "github.com/anshulrgoyal/grpc-gateway-demo;grpc_gateway_demo";
-package main;
+package auth;
 
 service Auth {
   rpc req_pq (Req_pq_input) returns (Req_pq_response) {

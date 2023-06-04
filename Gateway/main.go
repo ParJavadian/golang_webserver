@@ -48,7 +48,7 @@ func main() {
 			runtime.DefaultHTTPErrorHandler(ctx, mux, marshaler, writer, request, &newError)
 		}))
 	// setting up a dail up for gRPC service by specifying endpoint/target url
-	err := gen.RegisterAuthHandlerFromEndpoint(context.Background(), mux, "localhost:5052", []grpc.DialOption{grpc.WithInsecure()})
+	err := gen.RegisterAuthHandlerFromEndpoint(context.Background(), mux, "127.0.0.1:5052", []grpc.DialOption{grpc.WithInsecure()})
 	if err != nil {
 		log.Fatal(err)
 	}
