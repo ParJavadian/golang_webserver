@@ -9,3 +9,5 @@
 2023/06/04 08:15:30 [error] 23#23: *14 open() "/etc/nginx/welcome" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /welcome HTTP/1.1", host: "localhost"
 2023/06/04 08:15:40 [error] 23#23: *14 "/etc/nginx/welcome:443/index.html" is not found (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /welcome:443/ HTTP/1.1", host: "localhost", referrer: "http://localhost/"
 2023/06/04 08:51:36 [error] 23#23: *11 open() "/etc/nginx/welcome" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /welcome?alo=ds&bale=gt HTTP/1.1", host: "localhost", referrer: "http://localhost/welcome?alo=ds&bale=gt"
+2023/06/04 09:09:07 [error] 22#22: *32 "/etc/nginx/index.html" is not found (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
+2023/06/04 09:09:20 [error] 22#22: *32 "/etc/nginx/index.html" is not found (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
