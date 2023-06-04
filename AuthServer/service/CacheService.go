@@ -23,6 +23,9 @@ func getValue(ctx context.Context, key string) string {
 	if !initialized {
 		startRedisConnection()
 	}
+	if ctx == nil {
+		ctx = context.TODO()
+	}
 	val, err := client.Get(ctx, key).Result()
 	if err != nil {
 		fmt.Println(err)
@@ -34,6 +37,9 @@ func getValue(ctx context.Context, key string) string {
 func cacheData(ctx context.Context, key string, value string, expirationDuration time.Duration) {
 	if !initialized {
 		startRedisConnection()
+	}
+	if ctx == nil {
+		ctx = context.TODO()
 	}
 	if expirationDuration == -1 {
 		expirationDuration = redis.KeepTTL
@@ -47,6 +53,9 @@ func cacheData(ctx context.Context, key string, value string, expirationDuration
 func deleteValue(ctx context.Context, key string) {
 	if !initialized {
 		startRedisConnection()
+	}
+	if ctx == nil {
+		ctx = context.TODO()
 	}
 	err := client.Del(ctx, key).Err()
 	if err != nil {
