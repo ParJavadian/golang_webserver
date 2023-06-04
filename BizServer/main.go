@@ -6,13 +6,11 @@
 
 package main;
 
-import "time"
-
 type User struct {
   name string
   family string
   id int
   age int
   sex string
-  createdAt time.Time
+  createdAt int
 }
