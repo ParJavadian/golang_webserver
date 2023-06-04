@@ -16,8 +16,58 @@
     "application/json"
   ],
   "paths": {
-    "/v1/sayHello": {
-      "post": {
+    "/req_dh_params": {
+      "get": {
+        "operationId": "Auth_req_DH_params",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mainReq_DH_params_response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nonce",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "serverNonce",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "messageId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "a",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/req_pq": {
+      "get": {
         "operationId": "Auth_req_pq",
         "responses": {
           "200": {
@@ -35,12 +85,17 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/mainReq_pq_input"
-            }
+            "name": "nonce",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "messageId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -64,18 +119,6 @@
           "format": "int32"
         },
         "b": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "mainReq_pq_input": {
-      "type": "object",
-      "properties": {
-        "nonce": {
-          "type": "string"
-        },
-        "messageId": {
           "type": "integer",
           "format": "int32"
         }

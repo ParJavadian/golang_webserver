@@ -12,11 +12,16 @@ service Auth {
     option (google.api.http) = {
       // this is url, for RESTfull/JSON api and method
       // this line means when a HTTP post request comes with "/v1/sayHello" call this rpc method over this service
-      post: "/v1/sayHello"
-      body: "*"
+      get: "/req_pq"
     };
   }
-  rpc req_DH_params(Req_DH_params_input) returns (Req_DH_params_response) {}
+  rpc req_DH_params(Req_DH_params_input) returns (Req_DH_params_response) {
+    option (google.api.http) = {
+      // this is url, for RESTfull/JSON api and method
+      // this line means when a HTTP post request comes with "/v1/sayHello" call this rpc method over this service
+      get: "/req_dh_params"
+    };
+  }
 }
 
 message Req_pq_input {
