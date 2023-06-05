@@ -22,13 +22,13 @@ option java_multiple_files = true;
 option go_package = "./";
 //option go_package = "web/hw1/biz";
 //option go_package = "web/hw1/biz";
-package biz;
+package auth;
 
 //option go_package = "./";
 
 //import "google/protobuf/timestamp.proto";
 
-service biz {
+service Biz {
   rpc get_users (get_user_input1) returns (get_user_output) {}
   rpc get_users_with_sql_injection (get_user_input2) returns (get_user_output) {}
 }

@@ -4,13 +4,13 @@
 //     fmt.Println("hello world")
 // }
 
-package main;
+package main
 
-type User struct {
-  name string
-  family string
-  id int
-  age int
-  sex string
-  createdAt int
-}
+//type User struct {
+//	name      string
+//	family    string
+//	id        int
+//	age       int
+//	sex       string
+//	createdAt int
+//}

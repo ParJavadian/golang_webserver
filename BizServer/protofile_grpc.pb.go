@@ -19,7 +19,7 @@
 // - protoc             v3.12.4
 // source: protofile.proto
 
-package biz
+package main
 
 import (
 	context "context"
