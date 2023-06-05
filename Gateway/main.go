@@ -85,14 +85,37 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	mux2 := runtime.NewServeMux(
+		// convert header in response(going from gateway) from metadata received.
+		runtime.WithOutgoingHeaderMatcher(isHeaderAllowed),
+		runtime.WithMetadata(func(ctx context.Context, request *http.Request) metadata.MD {
+			header := request.Header.Get("Authorization")
+			// send all the headers received from the client
+			md := metadata.Pairs("auth", header)
+			return md
+		}),
+		runtime.WithErrorHandler(func(ctx context.Context, mux2 *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
+			//creating a new HTTTPStatusError with a custom status, and passing error
+			newError := runtime.HTTPStatusError{
+				HTTPStatus: 400,
+				Err:        err,
+			}
+			// using default handler to do the rest of heavy lifting of marshaling error and adding headers
+			runtime.DefaultHTTPErrorHandler(ctx, mux2, marshaler, writer, request, &newError)
+		}))
+	// setting up a dail up for gRPC service by specifying endpoint/target url
+	err2 := gen.RegisterBizHandlerFromEndpoint(context.Background(), mux2, "127.0.0.1:5062", []grpc.DialOption{grpc.WithInsecure()})
+	if err2 != nil {
+		log.Fatal(err2)
+	}
 	// Creating a normal HTTP server
 	server := gin.New()
 	server.Use(gin.Logger())
 	//server.Use(TokenAuthMiddleware())
 	server.Group("/req_pq").Any("", gin.WrapH(mux))
 	server.Group("/req_dh_params").Any("", gin.WrapH(mux))
-	server.Group("/get_users", TokenAuthMiddleware()).Any("", gin.WrapH(mux))
-	server.Group("/get_users_with_sql_inject", TokenAuthMiddleware()).Any("", gin.WrapH(mux))
+	server.Group("/get_users", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
+	server.Group("/get_users_sql", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
 
 	//server.GET("/test", func(c *gin.Context) {
 	//	c.String(http.StatusOK, "Ok")

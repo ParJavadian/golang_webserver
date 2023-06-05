@@ -4,6 +4,7 @@ package biz
 
 import (
 	context "context"
+	"fmt"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -81,6 +82,7 @@ func RegisterBizServer(s grpc.ServiceRegistrar, srv BizServer) {
 }
 
 func _Biz_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	fmt.Println("at least here")
 	in := new(GetUserInput1)
 	if err := dec(in); err != nil {
 		return nil, err

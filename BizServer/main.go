@@ -23,8 +23,10 @@ func main() {
 
 	s := grpc.NewServer()
 	gen.RegisterBizServer(s, &server{})
-
+	fmt.Println("registered biz server")
+	fmt.Println(s.GetServiceInfo())
 	err = s.Serve(listener)
+	fmt.Println("serving...")
 	if err != nil {
 		panic(err)
 	}

@@ -62,7 +62,6 @@ func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicK
 
 	responsePublicKey := (int(math.Pow(float64(pgParams.G), float64(b)))) % pgParams.P
 	commonKey := (int(math.Pow(float64(requestPublicKey), float64(b)))) % pgParams.P
-	fmt.Println(commonKey)
 
 	dhCacheKey := getCacheKeyDh(strconv.Itoa(commonKey), dhMethodName)
 	dhCacheValue := getCacheValuePg(nonce, serverNonce)
