@@ -1,4 +1,4 @@
-package service
+package main
 
 import (
 	"database/sql"
@@ -19,8 +19,8 @@ const (
 
 func main() {
 
-	//fmt.Println(get_user_by_id("5"))
-	fmt.Println(get_top_100_users())
+	fmt.Println(get_user_by_id("5"))
+	//fmt.Println(get_top_100_users())
 	//deleteStmt := `delete from "biz_table" where name=$1`
 	//_, e := db.Exec(deleteStmt, 'parmida')
 	//CheckError(e)
@@ -80,6 +80,9 @@ func get_user_by_id(input_id string) []*gen.User {
 	// open database
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
+
+	//_, err = db.Query(`ALTER TABLE "Student"; ADD COLUMN age bigint;`)
+	//CheckError(err)
 
 	insertStmt := `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','javadian', 12, 'female', 7800, 14)`
 	_, e := db.Exec(insertStmt)
