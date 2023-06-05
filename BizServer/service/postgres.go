@@ -1,4 +1,4 @@
-package service
+package main
 
 import (
 	"database/sql"
@@ -19,7 +19,11 @@ const (
 
 func main() {
 
-	fmt.Println(get_user_by_id(8))
+	//fmt.Println(get_user_by_id("5"))
+	fmt.Println(get_top_100_users())
+	//deleteStmt := `delete from "biz_table" where name=$1`
+	//_, e := db.Exec(deleteStmt, 'parmida')
+	//CheckError(e)
 
 	//todo: code below is for connection
 	//psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
@@ -32,7 +36,7 @@ func main() {
 	//defer db.Close()
 
 	//todo : code below is for inserting data to db
-	//insertStmt := `insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','javadian', 12, 'female', 7800, 14)`
+	//insertStmt := `insert into "biz_table" (name, family,age, sex,createdat, id) values ('parmida','mousazadeh', 0, 'female', 90, '5')`
 	//_, e := db.Exec(insertStmt)
 	//CheckError(e)
 
@@ -53,7 +57,7 @@ func main() {
 	//
 	//CheckError(err)
 
-	//todo: code below is for changing data to database
+	//todo: code below is for changing data at database
 	//updateStmt := `update "biz_table" set "family"=$1`
 	//_, e := db.Exec(updateStmt, "Masoudzadeh")
 	//CheckError(e)
@@ -70,7 +74,7 @@ func CheckError(err error) {
 	}
 }
 
-func get_user_by_id(input_id int64) []*gen.User {
+func get_user_by_id(input_id string) []*gen.User {
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
 	// open database
@@ -87,29 +91,21 @@ func get_user_by_id(input_id int64) []*gen.User {
 	rows, err := db.Query(`SELECT * FROM "biz_table" WHERE id = $1`, input_id)
 	CheckError(err)
 
-	defer rows.Close()
-	i := 0
 	for rows.Next() {
-		i++
+		var name string
+		var family string
+		var id int32
+		var age int32
+		var sex string
+		var createdAt int64
+		err = rows.Scan(&name, &family, &sex, &age, &createdAt, &id)
+		//fmt.Println(name, family, age)
+		newUser := gen.User{Name: name, Family: family, Age: age, Sex: sex, CreatedAt: createdAt, Id: id}
+		//fmt.Println(newUser)
+		users[0] = &newUser
 	}
-	if i == 0 {
-		users = make([]*gen.User, 100)
-		print("null")
-		users = get_top_100_users()
-	} else {
-		for rows.Next() {
-			var name string
-			var family string
-			var id int32
-			var age int32
-			var sex string
-			var createdAt int64
-			newUser := gen.User{Name: name, Family: family, Age: age, Sex: sex, CreatedAt: createdAt, Id: id}
-			users[0] = &newUser
-		}
-	}
+	defer rows.Close()
 	return users
-	//CheckError(err)
 }
 
 func get_top_100_users() []*gen.User {
@@ -119,13 +115,15 @@ func get_top_100_users() []*gen.User {
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
 
+	insertStmt := `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','javadian', 12, 'female', 7800, 14)`
+	_, e := db.Exec(insertStmt)
+	CheckError(e)
+
 	// close database
 	defer db.Close()
 	users := make([]*gen.User, 100)
 	rows, err := db.Query(`SELECT * FROM "biz_table"`)
 	CheckError(err)
-
-	defer rows.Close()
 	i := 0
 	for rows.Next() {
 		var name string
@@ -134,12 +132,17 @@ func get_top_100_users() []*gen.User {
 		var age int32
 		var sex string
 		var createdAt int64
+		err = rows.Scan(&name, &family, &sex, &age, &createdAt, &id)
+		//fmt.Println(name, family, age)
 		newUser := gen.User{Name: name, Family: family, Age: age, Sex: sex, CreatedAt: createdAt, Id: id}
+		//fmt.Println(newUser)
 		users[i] = &newUser
 		i++
-
-		//fmt.Println(name, family, age)
 	}
+	defer rows.Close()
 	return users
+
+	//fmt.Println(name, family, age)
+
 	//CheckError(err)
 }
