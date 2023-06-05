@@ -1,15 +1,64 @@
-package service
+package main
 
-import "os"
+//import (
+//	"database/sql"
+//	"fmt"
+//)
+
+//import "os"
+//
+//func main() {
+//	a := App{}
+//	a.Initialize(
+//		os.Getenv("APP_DB_USERNAME"),
+//		os.Getenv("APP_DB_PASSWORD"),
+//		os.Getenv("APP_DB_NAME"),
+//	)
+//	a.Run(":8001")
+//}
+
+//package main
+
+import (
+	"database/sql"
+	"fmt"
+	_ "github.com/lib/pq"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "howyoudoin"
+	dbname   = "biz_database"
+)
 
 func main() {
-	a := App{}
-	a.Initialize(
-		os.Getenv("APP_DB_USERNAME"),
-		os.Getenv("APP_DB_PASSWORD"),
-		os.Getenv("APP_DB_NAME"),
-	)
-	a.Run(":8001")
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	// close database
+	defer db.Close()
+
+	insertStmt := `insert into "biz_table" ("name", "family","age", "sex","createdAt", "id") values ("parmida","javadian", 1, "female", 5000, 5)`
+	_, e := db.Exec(insertStmt)
+	CheckError(e)
+
+	// check db
+	//err = db.Ping()
+	//CheckError(err)
+
+	fmt.Println("Connected!")
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
 
 //// // import (
@@ -120,6 +169,7 @@ func main() {
 //
 //import (
 //	_ "database/sql"
+//	"fmt"
 //	_ "github.com/lib/pq"
 //)
 //
@@ -132,7 +182,7 @@ func main() {
 //)
 //
 //func main() {
-//	//psqlInfo := fmt.Sprintf("host=localhost port=55432 user=postgres "+
-//	//	"password=how you doin dbname=biz_server_web sslmode=disable",
-//	//	host, port, user, password, dbname)
+//	psqlInfo := fmt.Sprintf("host=localhost port=55432 user=postgres "+
+//		"password=how you doin dbname=biz_server_web sslmode=disable",
+//		host, port, user, password, dbname)
 //}

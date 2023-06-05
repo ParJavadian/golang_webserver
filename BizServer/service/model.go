@@ -8,8 +8,8 @@ import (
 type User struct {
 	Name      string `json:"name"`
 	Family    string `json:"family"`
-	Id        int32  `json:"id"`
-	Age       int32  `json:"age"`
+	Id        int64  `json:"id"`
+	Age       int64  `json:"age"`
 	Sex       string `json:"sex"`
 	CreatedAt int64  `json:"createdAt"`
 }
