@@ -1,28 +1,12 @@
 package main
 
-//import (
-//	"database/sql"
-//	"fmt"
-//)
-
-//import "os"
-//
-//func main() {
-//	a := App{}
-//	a.Initialize(
-//		os.Getenv("APP_DB_USERNAME"),
-//		os.Getenv("APP_DB_PASSWORD"),
-//		os.Getenv("APP_DB_NAME"),
-//	)
-//	a.Run(":8001")
-//}
-
-//package main
-
 import (
 	"database/sql"
+	_ "database/sql"
 	"fmt"
+	_ "fmt"
 	_ "github.com/lib/pq"
+	gen "main/gen/go"
 )
 
 const (
@@ -34,43 +18,50 @@ const (
 )
 
 func main() {
-	// connection string
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	// open database
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
+	fmt.Println(get_user_by_id(8))
 
-	// close database
-	defer db.Close()
+	//todo: code below is for connection
+	//psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	//
+	//// open database
+	//db, err := sql.Open("postgres", psqlconn)
+	//CheckError(err)
+	//
+	//// close database
+	//defer db.Close()
 
 	//todo : code below is for inserting data to db
-	//insertStmt := `insert into "biz_table" (name, family,age, sex,createdat, id) values ('parmida','javadian', 1, 'female', 5000, 5)`
+	//insertStmt := `insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','javadian', 12, 'female', 7800, 14)`
 	//_, e := db.Exec(insertStmt)
 	//CheckError(e)
 
-	//todo : code below is for selecting data from db
-	rows, err := db.Query(`SELECT name, age FROM "biz_table"`)
-	CheckError(err)
-
-	defer rows.Close()
-	for rows.Next() {
-		var name string
-		var roll int
-
-		err = rows.Scan(&name, &roll)
-		CheckError(err)
-
-		fmt.Println(name, roll)
-	}
-
-	CheckError(err)
-
-	// check db
-	//err = db.Ping()
+	//todo : code below is for selecting columns from db
+	//rows, err := db.Query(`SELECT name, age FROM "biz_table"`)
+	//CheckError(err)
+	//
+	//defer rows.Close()
+	//for rows.Next() {
+	//	var name string
+	//	var roll int
+	//
+	//	err = rows.Scan(&name, &roll)
+	//	CheckError(err)
+	//
+	//	fmt.Println(name, roll)
+	//}
+	//
 	//CheckError(err)
 
-	fmt.Println("Connected!")
+	//todo: code below is for changing data to database
+	//updateStmt := `update "biz_table" set "family"=$1`
+	//_, e := db.Exec(updateStmt, "Masoudzadeh")
+	//CheckError(e)
+
+	//todo:code below is for testing connection
+	//err = db.Ping()
+	//CheckError(err)
+	//fmt.Println("Connected!")
 }
 
 func CheckError(err error) {
@@ -79,128 +70,76 @@ func CheckError(err error) {
 	}
 }
 
-//// // import (
-//// //    "database/sql" // add this
-//// //    "fmt"
-//// //    "log"
-//// //    "os"
-//// //    "github.com/lib/pq" // add this   "- "
-//// //
-//// //    "github.com/gofiber/fiber/v2"
-//// // )
-//// // http://localhost/
-//// //  connStr := "postgresql://<postgres>:<how you doin>@<biz_server_web>/todos?sslmode=disable
-//// // "
-//// //    // Connect to database
-//// //    db, err := sql.Open("postgres", connStr)
-//// //    if err != nil {
-//// //        log.Fatal(err)
-//// //    }
-//// //
-//// //
-//// //  func main() {
-//// //    app := fiber.New()
-//// //
-//// //    app.Get("/", indexHandler) // Add this
-//// //
-//// //    app.Post("/", postHandler) // Add this
-//// //
-//// //    app.Put("/update", putHandler) // Add this
-//// //
-//// //    app.Delete("/delete", deleteHandler) // Add this
-//// //
-//// //    port := os.Getenv("PORT")
-//// //    if port == "" {
-//// //        port = "3000"
-//// //    }
-//// //    log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
-//// // }
-//// //
-//// //
-//// // func indexHandler(c *fiber.Ctx) error {
-//// //    return c.SendString("Hello")
-//// // }
-//// // func postHandler(c *fiber.Ctx) error {
-//// //    return c.SendString("Hello")
-//// // }
-//// // func putHandler(c *fiber.Ctx) error {
-//// //    return c.SendString("Hello")
-//// // }
-//// // func deleteHandler(c *fiber.Ctx) error {
-//// //    return c.SendString("Hello")
-//// // }
-////
-////
-//// package main
-////
-//// import (
-////    "fmt"
-////    "log"
-////    "os"
-////
-////    "github.com/gofiber/fiber/v2"
-//// )
-////
-//// func main() {
-////    app := fiber.New()
-////    port := os.Getenv("PORT")
-////    if port == "" {
-////        port = "3000"
-////    }
-////    log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
-//// }
-////
-////  func main() {
-////    app := fiber.New()
-////
-////    app.Get("/", indexHandler) // Add this
-////
-////    app.Post("/", postHandler) // Add this
-////
-////    app.Put("/update", putHandler) // Add this
-////
-////    app.Delete("/delete", deleteHandler) // Add this
-////
-////    port := os.Getenv("PORT")
-////    if port == "" {
-////        port = "3000"
-////    }
-////    log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
-//// }
-////
-////
-//// func indexHandler(c *fiber.Ctx) error {
-////    return c.SendString("Hello")
-//// }
-//// func postHandler(c *fiber.Ctx) error {
-////    return c.SendString("Hello")
-//// }
-//// func putHandler(c *fiber.Ctx) error {
-////    return c.SendString("Hello")
-//// }
-//// func deleteHandler(c *fiber.Ctx) error {
-////    return c.SendString("Hello")
-//// }
-////
-//
-//package service
-//
-//import (
-//	_ "database/sql"
-//	"fmt"
-//	_ "github.com/lib/pq"
-//)
-//
-//const (
-//	host     = "localhost"
-//	port     = 5432
-//	user     = "postgres"
-//	password = "how you doin"
-//	dbname   = "biz_server_web"
-//)
-//
-//func main() {
-//	psqlInfo := fmt.Sprintf("host=localhost port=55432 user=postgres "+
-//		"password=how you doin dbname=biz_server_web sslmode=disable",
-//		host, port, user, password, dbname)
-//}
+func get_user_by_id(input_id int64) []*gen.User {
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	insertStmt := `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','javadian', 12, 'female', 7800, 14)`
+	_, e := db.Exec(insertStmt)
+	CheckError(e)
+
+	// close database
+	defer db.Close()
+	users := make([]*gen.User, 1)
+	rows, err := db.Query(`SELECT * FROM "biz_table" WHERE id = $1`, input_id)
+	CheckError(err)
+
+	defer rows.Close()
+	i := 0
+	for rows.Next() {
+		i++
+	}
+	if i == 0 {
+		users = make([]*gen.User, 100)
+		print("null")
+		users = get_top_100_users()
+	} else {
+		for rows.Next() {
+			var name string
+			var family string
+			var id int32
+			var age int32
+			var sex string
+			var createdAt int64
+			newUser := gen.User{Name: name, Family: family, Age: age, Sex: sex, CreatedAt: createdAt, Id: id}
+			users[0] = &newUser
+		}
+	}
+	return users
+	//CheckError(err)
+}
+
+func get_top_100_users() []*gen.User {
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	// close database
+	defer db.Close()
+	users := make([]*gen.User, 100)
+	rows, err := db.Query(`SELECT * FROM "biz_table"`)
+	CheckError(err)
+
+	defer rows.Close()
+	i := 0
+	for rows.Next() {
+		var name string
+		var family string
+		var id int32
+		var age int32
+		var sex string
+		var createdAt int64
+		newUser := gen.User{Name: name, Family: family, Age: age, Sex: sex, CreatedAt: createdAt, Id: id}
+		users[i] = &newUser
+		i++
+
+		//fmt.Println(name, family, age)
+	}
+	return users
+	//CheckError(err)
+}
