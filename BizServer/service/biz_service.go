@@ -1,6 +1,8 @@
 package service
 
-import gen "main/gen/go"
+import (
+	gen "main/gen/go"
+)
 
 //type User struct {
 //	Name      string `json:"name"`
@@ -13,8 +15,8 @@ import gen "main/gen/go"
 
 func GetUsers(userId string, messageId int) []*gen.User {
 	if userId == "" {
-		//TODO
+		return get_top_100_users()
 	} else {
-		//TODO
+		return get_user_by_id(userId)
 	}
 }

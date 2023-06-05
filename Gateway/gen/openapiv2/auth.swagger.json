@@ -7,6 +7,9 @@
   "tags": [
     {
       "name": "Auth"
+    },
+    {
+      "name": "Biz"
     }
   ],
   "consumes": [
@@ -16,6 +19,93 @@
     "application/json"
   ],
   "paths": {
+    "/get_users": {
+      "get": {
+        "operationId": "Biz_get_users",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authget_user_output"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "authKey",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "messageId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Biz"
+        ]
+      }
+    },
+    "/get_users_sql": {
+      "get": {
+        "operationId": "Biz_get_users_with_sql_injection",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authget_user_output"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "authKey",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "messageId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "Biz"
+        ]
+      }
+    },
     "/req_dh_params": {
       "get": {
         "operationId": "Auth_req_DH_params",
@@ -142,6 +232,47 @@
           "format": "int32"
         },
         "g": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "authUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sex": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "authget_user_output": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/authUser"
+          }
+        },
+        "messageId": {
           "type": "integer",
           "format": "int32"
         }
