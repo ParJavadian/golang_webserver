@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -53,7 +54,8 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 }
 
 func tokenAuthorized(token string) bool {
-	value := GetValue(nil, token)
+	value := GetValue(nil, "dh_"+token)
+	fmt.Println(value)
 	//value := service.GetPg("frf", 4).Nonce
 	return value != ""
 }

@@ -3,7 +3,9 @@ package service
 import (
 	"crypto/sha1"
 	"fmt"
+	"math"
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -45,7 +47,8 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 }
 
 func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicKey int) (DHParams, error) {
-	b := randomInt()
+	//TODO
+	b := 15
 	// get PgParams from cache
 	pgCacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	pgParamsString, err := GetValue(nil, pgCacheKey)
@@ -57,11 +60,14 @@ func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicK
 	if err != nil {
 		return DHParams{}, fmt.Errorf("pgParams not found or expired for nonce %s and serverNonce %s", nonce, serverNonce)
 	}
+	//TODO
+	fmt.Println(pgParams.G, b, pgParams.P)
+	fmt.Println(pgParams.G ^ b)
+	responsePublicKey := (int(math.Pow(float64(pgParams.G), float64(b)))) % pgParams.P
+	commonKey := (int(math.Pow(float64(requestPublicKey), float64(b)))) % pgParams.P
+	fmt.Println(commonKey)
 
-	responsePublicKey := (pgParams.G ^ b) % pgParams.P
-	commonKey := (requestPublicKey ^ b) % pgParams.P
-
-	dhCacheKey := getCacheKeyDh(string(rune(commonKey)), dhMethodName)
+	dhCacheKey := getCacheKeyDh(strconv.Itoa(commonKey), dhMethodName)
 	dhCacheValue := getCacheValuePg(nonce, serverNonce)
 	CacheData(nil, dhCacheKey, dhCacheValue, 20*time.Minute)
 
