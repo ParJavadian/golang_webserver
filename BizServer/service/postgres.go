@@ -44,9 +44,27 @@ func main() {
 	// close database
 	defer db.Close()
 
-	insertStmt := `insert into "biz_table" ("name", "family","age", "sex","createdAt", "id") values ("parmida","javadian", 1, "female", 5000, 5)`
-	_, e := db.Exec(insertStmt)
-	CheckError(e)
+	//todo : code below is for inserting data to db
+	//insertStmt := `insert into "biz_table" (name, family,age, sex,createdat, id) values ('parmida','javadian', 1, 'female', 5000, 5)`
+	//_, e := db.Exec(insertStmt)
+	//CheckError(e)
+
+	//todo : code below is for selecting data from db
+	rows, err := db.Query(`SELECT name, age FROM "biz_table"`)
+	CheckError(err)
+
+	defer rows.Close()
+	for rows.Next() {
+		var name string
+		var roll int
+
+		err = rows.Scan(&name, &roll)
+		CheckError(err)
+
+		fmt.Println(name, roll)
+	}
+
+	CheckError(err)
 
 	// check db
 	//err = db.Ping()
