@@ -47,8 +47,7 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 }
 
 func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicKey int) (DHParams, error) {
-	//TODO
-	b := 15
+	b := randomIntUpperBound(20)
 	// get PgParams from cache
 	pgCacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	pgParamsString, err := GetValue(nil, pgCacheKey)
@@ -60,9 +59,7 @@ func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicK
 	if err != nil {
 		return DHParams{}, fmt.Errorf("pgParams not found or expired for nonce %s and serverNonce %s", nonce, serverNonce)
 	}
-	//TODO
-	fmt.Println(pgParams.G, b, pgParams.P)
-	fmt.Println(pgParams.G ^ b)
+
 	responsePublicKey := (int(math.Pow(float64(pgParams.G), float64(b)))) % pgParams.P
 	commonKey := (int(math.Pow(float64(requestPublicKey), float64(b)))) % pgParams.P
 	fmt.Println(commonKey)
@@ -122,6 +119,10 @@ func randomString(length int) string {
 
 func randomInt() int {
 	return rand.Int()
+}
+
+func randomIntUpperBound(upperBound int) int {
+	return rand.Intn(upperBound)
 }
 
 func randomOddInt() int {
