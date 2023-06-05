@@ -38,7 +38,7 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 	pgResponse := PgParams{23, 5, nonce, serverNonce, responseMessageId}
 
 	// save to cache
-	cacheKey := getCacheKey(nonce, serverNonce, pgMethodName)
+	cacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	CacheData(nil, cacheKey, pgResponse.String(), 20*time.Minute)
 
 	return pgResponse
@@ -47,7 +47,7 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicKey int) (DHParams, error) {
 	b := randomInt()
 	// get PgParams from cache
-	pgCacheKey := getCacheKey(nonce, serverNonce, pgMethodName)
+	pgCacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	pgParamsString, err := GetValue(nil, pgCacheKey)
 	if err != nil {
 		return DHParams{}, fmt.Errorf("pgParams not found or expired for nonce %s and serverNonce %s", nonce, serverNonce)
@@ -61,8 +61,9 @@ func GetDHParams(nonce string, serverNonce string, messageId int, requestPublicK
 	responsePublicKey := (pgParams.G ^ b) % pgParams.P
 	commonKey := (requestPublicKey ^ b) % pgParams.P
 
-	dhCacheKey := getCacheKey(nonce, serverNonce, dhMethodName)
-	CacheData(nil, dhCacheKey, string(rune(commonKey)), 20*time.Minute)
+	dhCacheKey := getCacheKeyDh(string(rune(commonKey)), dhMethodName)
+	dhCacheValue := getCacheValuePg(nonce, serverNonce)
+	CacheData(nil, dhCacheKey, dhCacheValue, 20*time.Minute)
 
 	responseMessageId := randomOddInt()
 	dhParams := DHParams{
@@ -92,8 +93,16 @@ func getPgParamsFromString(pgParamsString string) (PgParams, error) {
 
 }
 
-func getCacheKey(nonce string, serverNonce string, methodName string) string {
+func getCacheKeyPg(nonce string, serverNonce string, methodName string) string {
 	return methodName + "_" + hashWithSHA1(nonce+serverNonce)
+}
+
+func getCacheKeyDh(authKey string, methodName string) string {
+	return methodName + "_" + authKey
+}
+
+func getCacheValuePg(nonce string, serverNonce string) string {
+	return nonce + " " + serverNonce
 }
 
 func randomString(length int) string {
