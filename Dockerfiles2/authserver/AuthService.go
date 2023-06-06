@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha1"
+	"encoding/hex"
 	"fmt"
 	"math"
 	"math/rand"
@@ -40,7 +41,6 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 	pgResponse := PgParams{23, 5, nonce, serverNonce, responseMessageId}
 
 	// save to cache
-	fmt.Println("ah ah ah")
 	cacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	CacheData(nil, cacheKey, pgResponse.String(), 20*time.Minute)
 
@@ -132,6 +132,6 @@ func randomOddInt() int {
 func hashWithSHA1(s string) string {
 	hash := sha1.New()
 	hash.Write([]byte(s))
-	hashInBytes := hash.Sum(nil)
-	return string(hashInBytes)
+	hashSum := hash.Sum(nil)
+	return hex.EncodeToString(hashSum)
 }

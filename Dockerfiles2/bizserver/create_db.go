@@ -6,7 +6,6 @@ import (
 	"fmt"
 	_ "fmt"
 
-	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 )
 
@@ -18,11 +17,11 @@ const (
 	dbname   = "biz_database"
 )
 
-func CreateServer() *fiber.App {
-	app := fiber.New()
+// func CreateServer() *fiber.App {
+// 	app := fiber.New()
 
-	return app
-}
+// 	return app
+// }
 
 // func main() {
 
@@ -50,21 +49,22 @@ func Create_database() {
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
 	// open database
-	db, _ := sql.Open("postgres", psqlconn)
+	db, err := sql.Open("postgres", psqlconn)
 	// if err != nil{
 	// 	fmt.Println(err)
 	// }
-	_, _ = db.Query(`CREATE TABLE "biz_table" (name TEXT, family TEXT,sex TEXT,age bigint,createdat bigint,id bigint);`)
-	// CheckError2(err)
-	insertStmt := `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('par','javadian', 12, 'female', 7800, 1)`
-	_, _ = db.Exec(insertStmt)
-	// CheckError2(e)
-	insertStmt = `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('negar','bsh', 12, 'female', 7800, 2)`
-	_, _ = db.Exec(insertStmt)
-	// CheckError2(e)
-	insertStmt = `-- insert into "biz_table" (name, family,age, sex,createdat, id) values ('kiana','msz', 12, 'female', 7800, 3)`
-	_, _ = db.Exec(insertStmt)
-	// CheckError2(e)
+	CheckError(err)
+	_, err = db.Query(`CREATE TABLE biz_table (name TEXT, family TEXT,sex TEXT,age bigint,createdat bigint,id bigint);`)
+	CheckError(err)
+	insertStmt := `-- insert into biz_table (name, family,age, sex,createdat, id) values ('par','javadian', 12, 'female', 7800, 1)`
+	_, err = db.Exec(insertStmt)
+	CheckError(err)
+	insertStmt = `-- insert into biz_table (name, family,age, sex,createdat, id) values ('negar','bsh', 12, 'female', 7800, 2)`
+	_, err = db.Exec(insertStmt)
+	CheckError(err)
+	insertStmt = `-- insert into biz_table (name, family,age, sex,createdat, id) values ('kiana','msz', 12, 'female', 7800, 3)`
+	_, err = db.Exec(insertStmt)
+	CheckError(err)
 	//dbName := "biz_database3"
 	//_, err = db.Exec("create database " + dbname)
 	//CheckError(err)
@@ -87,14 +87,14 @@ func Create_database() {
 
 }
 
-func CheckError(err error) {
+func CheckError2(err error) {
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
 }
 
-func CheckError2(err error) {
+func CheckError(err error) {
 	if err != nil {
 		fmt.Println(err)
 	}
