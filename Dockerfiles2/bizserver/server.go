@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "fmt"
 	gen "main/gen/go"
-	"main/service"
 )
 
 type server struct {
@@ -14,7 +13,7 @@ type server struct {
 
 func (s *server) GetUsers(ctx context.Context, input *gen.GetUserInput1) (*gen.GetUserOutput, error) {
 	fmt.Println("Received GetUsers request", input)
-	res := service.GetUsers(fmt.Sprint(input.UserId), int(input.MessageId))
+	res := GetUsers(fmt.Sprint(input.UserId), int(input.MessageId))
 	return &gen.GetUserOutput{
 		User:      res,
 		MessageId: 3,
@@ -23,7 +22,7 @@ func (s *server) GetUsers(ctx context.Context, input *gen.GetUserInput1) (*gen.G
 
 func (s *server) GetUsersWithSqlInjection(ctx context.Context, input *gen.GetUserInput2) (*gen.GetUserOutput, error) {
 	fmt.Println("Received GetUsersWithSqlInjection request", input)
-	res := service.GetUsers(input.UserId, int(input.MessageId))
+	res := GetUsers(input.UserId, int(input.MessageId))
 	return &gen.GetUserOutput{
 		User:      res,
 		MessageId: 3,

@@ -8,14 +8,16 @@ package main
 
 import (
 	"fmt"
-	"google.golang.org/grpc"
+	// "main/service"
 	gen "main/gen/go"
 	"net"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
-
-	listener, err := net.Listen("tcp", "127.0.0.1:5062")
+	Create_database()
+	listener, err := net.Listen("tcp", "0.0.0.0:5062")
 	if err != nil {
 		panic(err)
 	}
@@ -23,10 +25,8 @@ func main() {
 
 	s := grpc.NewServer()
 	gen.RegisterBizServer(s, &server{})
-	fmt.Println("registered biz server")
 	fmt.Println(s.GetServiceInfo())
 	err = s.Serve(listener)
-	fmt.Println("serving...")
 	if err != nil {
 		panic(err)
 	}
