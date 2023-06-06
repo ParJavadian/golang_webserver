@@ -1,0 +1,14 @@
+services:
+  gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "6433:6433"
+      # - "5052:6433"
+      # - "6433:5052"
+      # - "5052:5052"
+  postgres:
+    image: "postgres"
+    ports:
+      - "5432:5432"

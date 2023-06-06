@@ -1,0 +1,39 @@
+services:
+  proxy:
+    image: nginx
+    volumes:
+      - type: bind
+        source: ./nginx/proxy
+        target: /etc/nginx
+    ports:
+      - 80:80
+      - 443:443
+  authserver:
+    build:
+      context: ./authserver
+      dockerfile: Dockerfile
+    ports:
+      - 5052:5052
+  redis:
+    image: "redis"
+    ports:
+      - 6379:6379
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - 6433:6433
+  # bizserver:
+  #   build:
+  #     context: ./bizserver
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 5062:5062
+  #   environment:
+  #     - POSTGRES_PASSWORD=12345
+  #     - POSTGRES_USER=postgres
+  postgres:
+    image: "postgres"
+    ports:
+      - 5432:5432

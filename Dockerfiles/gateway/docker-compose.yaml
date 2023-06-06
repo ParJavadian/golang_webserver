@@ -1,11 +1,14 @@
 services:
-  authserver:
+  gateway:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "5052:5052"
+      - "6433:6433"
+      # - "5052:6433"
+      # - "6433:5052"
+      # - "5052:5052"
   redis:
     image: "redis"
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
