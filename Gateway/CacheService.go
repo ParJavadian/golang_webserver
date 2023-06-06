@@ -22,7 +22,7 @@ func startRedisConnection() {
 	initialized = true
 }
 
-func GetValue(ctx context.Context, key string) (string, error) {
+func GetValue(ctx context.Context, key string) string {
 	if !initialized {
 		startRedisConnection()
 	}
@@ -31,10 +31,10 @@ func GetValue(ctx context.Context, key string) (string, error) {
 	}
 	val, err := client.Get(ctx, key).Result()
 	if err != nil {
-		fmt.Println("Error while getting data: ", err)
-		return "", err
+		fmt.Println(err)
+		return ""
 	}
-	return val, nil
+	return val
 }
 
 func CacheData(ctx context.Context, key string, value string, expirationDuration time.Duration) {

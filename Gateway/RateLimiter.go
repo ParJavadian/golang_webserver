@@ -22,7 +22,7 @@ func CheckBlocked() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		clientIp := ctx.ClientIP()
 		// Check if the user has exceeded the rate limit
-		if ok, err := isBlocked(ctx, clientIp); err != nil || !ok {
+		if blocked, err := isBlocked(ctx, clientIp); err != nil || blocked {
 			ctx.AbortWithStatus(429)
 			return
 		}
@@ -53,9 +53,9 @@ func isRateLimitExceeded(sub time.Duration) bool {
 
 func isBlocked(ctx context.Context, clientIp string) (bool, error) {
 	key := fmt.Sprintf("blocked_%s", clientIp)
-	value, err := GetValue(ctx, key)
-	if err != nil {
-		return false, err
+	value := GetValue(ctx, key)
+	if value == "" {
+		return false, nil
 	}
 	blocked, err := strconv.ParseBool(value)
 	if err != nil {
