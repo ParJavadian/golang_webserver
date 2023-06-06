@@ -1,4 +1,4 @@
-package service
+package main
 
 import (
 	"crypto/sha1"
@@ -40,6 +40,7 @@ func GetPg(nonce string, requestMessageId int) PgParams {
 	pgResponse := PgParams{23, 5, nonce, serverNonce, responseMessageId}
 
 	// save to cache
+	fmt.Println("ah ah ah")
 	cacheKey := getCacheKeyPg(nonce, serverNonce, pgMethodName)
 	CacheData(nil, cacheKey, pgResponse.String(), 20*time.Minute)
 

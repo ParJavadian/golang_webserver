@@ -1,10 +1,11 @@
-package service
+package main
 
 import (
 	"context"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var client *redis.Client
@@ -12,7 +13,7 @@ var initialized = false
 
 func startRedisConnection() {
 	client = redis.NewClient(&redis.Options{
-		Addr:     "127.0.0.1:6379",
+		Addr:     "redis:6379",
 		Password: "", // no password set
 		DB:       3,  // use default DB
 	})

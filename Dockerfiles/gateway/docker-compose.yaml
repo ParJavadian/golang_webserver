@@ -1,0 +1,11 @@
+services:
+  authserver:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5052:5052"
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"

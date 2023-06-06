@@ -1,7 +1,0 @@
-services:
-  backend:
-    build:
-      context: backend
-      # target: builder
-    ports:
-      - 5052:5052
