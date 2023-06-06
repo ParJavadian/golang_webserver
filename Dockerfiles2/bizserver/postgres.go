@@ -125,7 +125,6 @@ func get_top_100_users() []*gen.User {
 	CheckError(e)
 
 	// close database
-	defer db.Close()
 	users := make([]*gen.User, 100)
 	rows, err := db.Query(`SELECT * FROM "biz_table"`)
 	CheckError(err)
@@ -145,6 +144,7 @@ func get_top_100_users() []*gen.User {
 		i++
 	}
 	defer rows.Close()
+	defer db.Close()
 	return users
 
 	//fmt.Println(name, family, age)

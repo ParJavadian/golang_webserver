@@ -133,11 +133,11 @@ func main() {
 
 	// setting up a rate limiter
 	limit = ratelimit.New(*rps)
-	server.Use(leakBucket())
+	//server.Use(leakBucket())
 
 	//server.Use(TokenAuthMiddleware())
-	server.Group("/req_pq").Any("", gin.WrapH(mux))
-	server.Group("/req_dh_params").Any("", gin.WrapH(mux))
+	server.Group("/req_pq", leakBucket()).Any("", gin.WrapH(mux))
+	server.Group("/req_dh_params", leakBucket()).Any("", gin.WrapH(mux))
 	server.Group("/get_users", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
 	server.Group("/get_users_sql", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
 
