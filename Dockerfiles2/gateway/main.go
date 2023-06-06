@@ -2,37 +2,17 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
+	gen "main/gen/go"
 	"net/http"
 	"strings"
-	"time"
-
-	gen "main/gen/go"
 
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-
-	"github.com/fatih/color"
-	"go.uber.org/ratelimit"
 )
-
-var (
-	limit ratelimit.Limiter
-	rps   = flag.Int("rps", 100, "request per second")
-)
-
-func leakBucket() gin.HandlerFunc {
-	prev := time.Now()
-	return func(ctx *gin.Context) {
-		now := limit.Take()
-		log.Print(color.CyanString("%v", now.Sub(prev)))
-		prev = now
-	}
-}
 
 var allowedHeaders = map[string]struct{}{
 	"x-request-id": {},
@@ -75,6 +55,9 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 func tokenAuthorized(token string) bool {
 	value := GetValue(nil, "dh_"+token)
+	if value == "" {
+		return false
+	}
 	fmt.Println(value)
 	//value := service.GetPg("frf", 4).Nonce
 	return value != ""
@@ -131,14 +114,11 @@ func main() {
 	// Creating a normal HTTP server
 	server := gin.New()
 	server.Use(gin.Logger())
-
-	// setting up a rate limiter
-	limit = ratelimit.New(*rps)
-	//server.Use(leakBucket())
+	server.Use(CheckBlocked())
 
 	//server.Use(TokenAuthMiddleware())
-	server.Group("/req_pq",leakBucket()).Any("", gin.WrapH(mux))
-	server.Group("/req_dh_params",leakBucket()).Any("", gin.WrapH(mux))
+	server.Group("/req_pq", ApplyLeakBucket()).Any("", gin.WrapH(mux))
+	server.Group("/req_dh_params", ApplyLeakBucket()).Any("", gin.WrapH(mux))
 	server.Group("/get_users", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
 	server.Group("/get_users_sql", TokenAuthMiddleware()).Any("", gin.WrapH(mux2))
 

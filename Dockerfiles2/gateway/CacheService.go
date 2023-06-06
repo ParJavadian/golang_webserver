@@ -3,14 +3,18 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var client *redis.Client
 var initialized = false
 
 func startRedisConnection() {
+	if initialized {
+		return
+	}
 	client = redis.NewClient(&redis.Options{
 		Addr:     "redis:6379",
 		Password: "", // no password set
@@ -34,7 +38,7 @@ func GetValue(ctx context.Context, key string) string {
 	return val
 }
 
-func cacheData(ctx context.Context, key string, value string, expirationDuration time.Duration) {
+func CacheData(ctx context.Context, key string, value string, expirationDuration time.Duration) {
 	if !initialized {
 		startRedisConnection()
 	}
@@ -46,11 +50,13 @@ func cacheData(ctx context.Context, key string, value string, expirationDuration
 	}
 	err := client.Set(ctx, key, value, expirationDuration).Err()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error while caching data: ", err)
+	} else {
+		fmt.Println("Successfully cached data with key ", key, " and value ", value)
 	}
 }
 
-func deleteValue(ctx context.Context, key string) {
+func DeleteValue(ctx context.Context, key string) {
 	if !initialized {
 		startRedisConnection()
 	}
@@ -59,6 +65,8 @@ func deleteValue(ctx context.Context, key string) {
 	}
 	err := client.Del(ctx, key).Err()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error while deleting data: ", err)
+	} else {
+		fmt.Println("Successfully deleted data with key ", key)
 	}
 }
