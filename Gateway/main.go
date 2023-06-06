@@ -73,7 +73,11 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 }
 
 func tokenAuthorized(token string) bool {
-	value := GetValue(nil, "dh_"+token)
+	value, err := GetValue(nil, "dh_"+token)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
 	fmt.Println(value)
 	//value := service.GetPg("frf", 4).Nonce
 	return value != ""

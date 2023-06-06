@@ -11,6 +11,9 @@ var client *redis.Client
 var initialized = false
 
 func startRedisConnection() {
+	if initialized {
+		return
+	}
 	client = redis.NewClient(&redis.Options{
 		Addr:     "127.0.0.1:6379",
 		Password: "", // no password set
